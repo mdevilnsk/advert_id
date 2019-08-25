@@ -6,8 +6,8 @@ class AdvertId {
   static const MethodChannel _channel =
       const MethodChannel('advert_id');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  static Future<String> get id async {
+    final String id = await _channel.invokeMethod('getAdvertisingId');
+    return id;
   }
 }
