@@ -4,11 +4,11 @@ import AdSupport
 
 public class SwiftAdvertIdPlugin: NSObject, FlutterPlugin {
 
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "advert_id", binaryMessenger: registrar.messenger())
-    let instance = SwiftAdvertIdPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "advert_id", binaryMessenger: registrar.messenger())
+        let instance = SwiftAdvertIdPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
 
     static let setLatestLinkKey = "latestLink"
 
@@ -47,53 +47,53 @@ public class SwiftAdvertIdPlugin: NSObject, FlutterPlugin {
         return false
     }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-        case "getAdvertisingId":
-            var idfaString: String!
-            let manager = ASIdentifierManager.shared()
-            if manager.isAdvertisingTrackingEnabled {
-                idfaString = manager.advertisingIdentifier.uuidString
-            } else {
-                idfaString = ""
-            }
-            result(idfaString)
-        case "getInitialLink":
-            result(initialLink)
-        case "getLatestLink":
-            result(self.lastestlink)
-        default:
-            result(FlutterMethodNotImplemented)
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+            case "getAdvertisingId":
+                var idfaString: String!
+                let manager = ASIdentifierManager.shared()
+                if manager.isAdvertisingTrackingEnabled {
+                    idfaString = manager.advertisingIdentifier.uuidString
+                } else {
+                    idfaString = ""
+                }
+                result(idfaString)
+            case "getInitialLink":
+                result(initialLink)
+            case "getLatestLink":
+                result(self.lastestLink)
+            default:
+                result(FlutterMethodNotImplemented)
+        }
     }
-  }
 
-  func onListen(withArguments arguments: Any?, eventSink: FlutterEventSink) -> FlutterError? {
-      self.eventSink = eventSink
-      return nil
-  }
+    func onListen(withArguments arguments: Any?, eventSink: FlutterEventSink) -> FlutterError? {
+        self.eventSink = eventSink
+        return nil
+    }
 
-  func onCancel(withArguments arguments: Any?) -> FlutterError? {
-      eventSink = nil
-      return nil
-  }
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        eventSink = nil
+        return nil
+    }
 
-  public func getDeferredLinks(){
-    AppLinkUtility.fetchDeferredAppLink({ url, error in
-        NotificationCenter.default.post(name: NSNotification.Name("LOAD_FINISH"), object: url)
+    public func getDeferredLinks(){
+        AppLinkUtility.fetchDeferredAppLink({ url, error in
+            NotificationCenter.default.post(name: NSNotification.Name("LOAD_FINISH"), object: url)
 
-        if error != nil {
-            if let error = error {
-                print("Received error while fetching deferred app link \(error)")
+            if error != nil {
+                if let error = error {
+                    print("Received error while fetching deferred app link \(error)")
+                }
             }
-        }
-        if url != nil {
-            if let url = url {
-                self.latestLink = url.getAbsoluteString
-                //UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if url != nil {
+                if let url = url {
+//                self.latestLink = url.getAbsoluteString
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            } else {
+                self.showAlert(alertMessage: "received deeplink is nil")
             }
-        } else {
-            self.showAlert(alertMessage: "received deeplink is nil")
-        }
-    })
-  }
+        })
+    }
 }
