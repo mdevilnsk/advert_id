@@ -15,10 +15,10 @@ advertising id flutter plugin
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'FBSDKCoreKit'
+
 
   s.ios.deployment_target = '8.0'
   s.swift_version = '4.2'
-  s.static_framework = true
+
 end
 
