@@ -19,5 +19,6 @@ advertising id flutter plugin
 
   s.ios.deployment_target = '8.0'
   s.swift_version = '4.2'
+  s.static_framework = true
 end
 
