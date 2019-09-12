@@ -1,6 +1,5 @@
 #import "AdvertIdPlugin.h"
 #import <AdSupport/ASIdentifierManager.h>
-#import <Bolts/Bolts.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 static NSString *const kMessagesChannel = @"uni_links/messages";
@@ -55,7 +54,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSURL *url = (NSURL *)launchOptions[UIApplicationLaunchOptionsURLKey];
     self.initialLink = [url absoluteString];
     self.latestLink = self.initialLink;
-    [AppLinkUtility fetchDeferredAppLink:^(NSURL *url, NSError *error) {
+    [FBSDKAppLinkUtility fetchDeferredAppLink:^(NSURL *url, NSError *error) {
         if (error) {
             NSLog(@"Received error while fetching deferred app link %@", error);
         }
