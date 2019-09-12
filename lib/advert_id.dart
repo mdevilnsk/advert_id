@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 Stream<String> _stream;
 
 class AdvertId {
-  static const MethodChannel _channel = const MethodChannel('advert_id');
-  static const EventChannel _eChannel = const MethodChannel('advert_id');
+  static const MethodChannel _channel =
+      const MethodChannel('advert_id/messages');
+  static const EventChannel _eChannel = const EventChannel('advert_id/events');
+  Stream<String> _stream;
 
-  static Future<String> get id async {
+  Future<String> get id async {
     final String id = await _channel.invokeMethod('getAdvertisingId');
     return id;
   }
@@ -17,7 +19,7 @@ class AdvertId {
   ///
   ///   * the initially stored link (possibly null), on successful invocation;
   ///   * a [PlatformException], if the invocation failed in the platform plugin.
-  static Future<String> getInitialLink() async {
+  Future<String> getInitialLink() async {
     final String initialLink = await _channel.invokeMethod('getInitialLink');
     return initialLink;
   }
@@ -27,7 +29,7 @@ class AdvertId {
   ///
   /// If the link is not valid as a URI or URI reference,
   /// a [FormatException] is thrown.
-  static Future<Uri> getInitialUri() async {
+  Future<Uri> getInitialUri() async {
     final String link = await getInitialLink();
     if (link == null) return null;
     return Uri.parse(link);
@@ -49,7 +51,7 @@ class AdvertId {
   ///
   /// If the app was stared by a link intent or user activity the stream will
   /// not emit that initial one - query either the `getInitialLink` instead.
-  static Stream<String> getLinksStream() {
+  Stream<String> getLinksStream() {
     if (_stream == null) {
       _stream = _eChannel.receiveBroadcastStream().cast<String>();
     }
@@ -65,7 +67,7 @@ class AdvertId {
   ///
   /// If the app was stared by a link intent or user activity the stream will
   /// not emit that initial uri - query either the `getInitialUri` instead.
-  static Stream<Uri> getUriLinksStream() {
+  Stream<Uri> getUriLinksStream() {
     return getLinksStream().transform<Uri>(
       new StreamTransformer<String, Uri>.fromHandlers(
         handleData: (String link, EventSink<Uri> sink) {
