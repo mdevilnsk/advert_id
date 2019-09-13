@@ -2,8 +2,8 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
-static NSString *const kMessagesChannel = @"uni_links/messages";
-static NSString *const kEventsChannel = @"uni_links/events";
+static NSString *const kMessagesChannel = @"advert_id/messages";
+static NSString *const kEventsChannel = @"advert_id/events";
 
 @interface AdvertIdPlugin () <FlutterStreamHandler>
 @property(nonatomic, copy) NSString *initialLink;
